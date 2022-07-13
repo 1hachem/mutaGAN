@@ -1,2 +1,10 @@
+#directories
 data/
 .neptune/
+
+#data
+*.faa
+*.fna
+*.fasta
+*.tsv
+*.csv

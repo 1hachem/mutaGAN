@@ -76,29 +76,29 @@ def create_pairs(clades, protein_records):
 
 
 def load_data(parents, children, batch_size):
-    training_parents = torch.utils.data.DataLoader(
+    parent_data_loader = torch.utils.data.DataLoader(
     BiologicalSequenceDataset(parents),
     batch_size,
     collate_fn=collate_fn
     )
 
-    training_children = torch.utils.data.DataLoader(
+    child_data_loader = torch.utils.data.DataLoader(
         BiologicalSequenceDataset(children),
         batch_size,
         collate_fn=collate_fn
     )
 
-    return training_parents, training_children
+    return parent_data_loader, child_data_loader
 
 
-def save_loaders(training_parents, training_children):
-    pickle.dump(training_parents, open(parent_pickeled_loader, "wb"))
-    pickle.dump(training_parents, open(child_pickeled_loader, "wb"))
+def save_loaders(parent_data_loader, child_data_loader):
+    pickle.dump(parent_data_loader, open(parent_pickeled_loader, "wb"))
+    pickle.dump(child_data_loader, open(child_pickeled_loader, "wb"))
     print("saved at: ", parent_pickeled_loader + " and "+ child_pickeled_loader)
     
 
 def fast_load():
-    training_parents = pickle.load(open(parent_pickeled_loader, "rb"))  
-    children_parents = pickle.load(open(child_pickeled_loader, "rb"))
+    parent_data_loader = pickle.load(open(parent_pickeled_loader, "rb"))  
+    child_data_loader = pickle.load(open(child_pickeled_loader, "rb"))
 
-    return training_parents, children_parents
+    return parent_data_loader, child_data_loader

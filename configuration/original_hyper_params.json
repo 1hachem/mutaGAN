@@ -5,16 +5,17 @@
 "---encoder---":"",
 "encoder_emb_size" : 250,
 "encoder_hidden_size" : 256,
-"encoder_num_layers" : 128, 
+"encoder_num_layers" : 1, 
 
 "---decoder---":"",
 "decoder_emb_size" : 250,
-"decoder_hidden_size" : 256,
-"decoder_num_layers" : 128, 
+"decoder_hidden_size" : 512,
+"decoder_num_layers" : 1, 
 
 "---MLE training---":"",
 "MLE_num_epochs" : 72,
-"MLE_batch_size" : 16,
+"MLE_batch_size" : 2,
+"teacher_forcing_ratio": 0.7,
 "MLE_learning_rate" : 0.01,
 
 "---GAN training---":"",

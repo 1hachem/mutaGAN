@@ -95,9 +95,9 @@ class Seq2Seq(nn.Module):
         self.teacher_forcing_ratio = new_ratio
 
 
-class Discriminator(nn.Module):
+class Classifier(nn.Module):
     def __init__(self, hidden_size, device="cuda" if torch.cuda.is_available() else "cpu"):
-        super(Discriminator, self).__init__()
+        super(Classifier, self).__init__()
         self.hidden_size = hidden_size
         self.classifier = nn.Sequential(
             nn.Dropout(0.2),

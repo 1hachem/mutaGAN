@@ -16,3 +16,6 @@ data/
 #neptune
 test_neptune.py
 .neptune/
+
+#auth
+configuration/auth.json

@@ -1,7 +1,6 @@
 #directories
-__pycache__/
+*__pycache__/
 data/
-.neptune/
 
 #compiled
 *.py[cod]
@@ -13,3 +12,7 @@ data/
 
 #notebooks
 *.ipynb
+
+#neptune
+test_neptune.py
+.neptune/

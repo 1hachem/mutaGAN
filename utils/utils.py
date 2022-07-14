@@ -1,4 +1,6 @@
 import json
+from Bio import SeqIO
+
   
 
 def read_json(file):
@@ -9,3 +11,7 @@ def read_json(file):
         data = json.load(f)
 
     return data
+
+
+def read_fasta(file):
+    return list(SeqIO.parse("data/ncbidata/genomic.fna", "fasta"))

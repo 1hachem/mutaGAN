@@ -1,0 +1,24 @@
+{
+"---general---":"",
+"vocab_size" : "28",
+
+"---encoder---":"",
+"encoder_emb_size" : "250",
+"encoder_hidden_size" : "256",
+"encoder_num_layers" : "128", 
+
+"---decoder---":"",
+"decoder_emb_size" : "250",
+"decoder_hidden_size" : "256",
+"decoder_num_layers" : "128", 
+
+"---MLE training---":"",
+"MLE_num_epochs" : "72",
+"MLE_batch_size" : "16",
+"MLE_learning_rate" : "0.01",
+
+"---GAN training---":"",
+"GAN_num_epochs" : "350",
+"GAN_batch_size" : "16",
+"GAN_learning_rate" : "1e-3"
+}

@@ -26,8 +26,8 @@ files = read_json("configuration/files.json")
 
 clade_assignment_path = files["clade_assignment"]
 genomic_sample = files["genomic_sample"]
-clades_in_out = files["clades_in_out"]
- 
+clades_in_out_path = files["clades_in_out"]
+
 
 def read_data():
 
@@ -54,7 +54,10 @@ def read_data():
 
 
 def create_pairs(clades, protein_records):
-    #compose parent-childs pairs
+    #parent clades with respect to their child clades
+    clades_in_out = read_json(clades_in_out_path)
+
+    #compose parent-child pairs
     parents = []
     children = []
     for parent_clade in clades_in_out.keys():

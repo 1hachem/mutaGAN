@@ -2,5 +2,7 @@
     "clade_assignment":"data/output/nextclade.tsv",
     "genomic_sample":"data/ncbidata/genomic.fna",
     "protein_sample":"data/ncbidata/protein.faa",
-    "clades_in_out" :"data/clade_in_clade_out.json"
+    "clades_in_out" :"data/clade_in_clade_out.json",
+    "parent_pickeled_loader": "data/training_parents.p",
+    "child_pickeled_loader":"data/training_children.p"
 }

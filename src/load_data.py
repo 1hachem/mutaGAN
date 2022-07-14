@@ -1,5 +1,6 @@
 import torch
 import pandas as pd
+import pickle
 
 from src.encode import to_ix
 from utils.utils import read_json, read_fasta
@@ -27,6 +28,8 @@ files = read_json("configuration/files.json")
 clade_assignment_path = files["clade_assignment"]
 genomic_sample = files["genomic_sample"]
 clades_in_out_path = files["clades_in_out"]
+parent_pickeled_loader, child_pickeled_loader = files["parent_pickeled_loader"], files["child_pickeled_loader"]
+
 
 
 def read_data():
@@ -44,8 +47,8 @@ def read_data():
     #drop unassigned sequences
     indexes_to_drop = clades[clades["clade"]=="recombinant"].index
 
+    clades = clades.drop(index=indexes_to_drop)
     clades = clades.reset_index()
-    clades = clades.drop(index=indexes_to_drop )
 
     for index in sorted(indexes_to_drop, reverse=True):
         del protein_records[index]
@@ -86,5 +89,16 @@ def load_data(parents, children, batch_size):
     )
 
     return training_parents, training_children
+
+
+def save_loaders(training_parents, training_children):
+    pickle.dump(training_parents, open(parent_pickeled_loader, "wb"))
+    pickle.dump(training_parents, open(child_pickeled_loader, "wb"))
+    print("saved at: ", parent_pickeled_loader + " and "+ child_pickeled_loader)
     
 
+def fast_load():
+    training_parents = pickle.load(open(parent_pickeled_loader, "rb"))  
+    children_parents = pickle.load(open(child_pickeled_loader, "rb"))
+
+    return training_parents, children_parents

@@ -1,10 +1,15 @@
 #directories
+__pycache__/
 data/
 .neptune/
 
+#compiled
+*.py[cod]
+
 #data
-*.faa
-*.fna
+*.f[an]a
 *.fasta
-*.tsv
-*.csv
+*.[tc]sv
+
+#notebooks
+*.ipynb

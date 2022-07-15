@@ -8,12 +8,14 @@ paper : <https://arxiv.org/abs/2008.11790>
 
 1. clone repo
 
-```git clone https://github.com/1hachem/mutaGAN.git 
+```
+git clone https://github.com/1hachem/mutaGAN.git 
 cd mutaGAN
 ```
 
 2. install dependencies
 
-```conda env create -f environment.yml
+```
+conda env create -f environment.yml
 conda activate mutaGAN
 ```

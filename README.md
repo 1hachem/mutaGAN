@@ -14,6 +14,6 @@ cd mutaGAN
 2. install dependencies 
 
 ```
-conda create env -f environment.yml
+conda env create -f environment.yml
 conda activate mutaGAN
 ```

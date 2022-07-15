@@ -77,7 +77,7 @@ class Seq2Seq(nn.Module):
         #sos_token = to_ix["<sos>"]
         x = sos_token*torch.ones((batch_size,1)).int().to(self.device)
 
-        for t in range(50): #range(child_len):
+        for t in range(child_len):
             #output shape (batch_size, 1, vocab size)
             #outputs shape ((batch_size, seq_len, vocab size))
             output, hidden_, state_ = self.decoder(x, hidden_, state_)

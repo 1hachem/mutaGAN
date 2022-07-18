@@ -5,7 +5,7 @@ from tqdm import tqdm
 from src.encode import to_ix
 
 
-def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator, optimizer_discriminator, parent_data_loader, child_data_loader, not_child_data_loader, num_epochs, device):
+def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator, optimizer_discriminator, parent_data_loader, child_data_loader, not_child_data_loader, num_epochs, device, neptune_run=None):
     for epoch in range(num_epochs):
         progress_bar = tqdm(zip(parent_data_loader, child_data_loader, not_child_data_loader), total=len(parent_data_loader))
         for parent, child, not_child in progress_bar:
@@ -44,7 +44,6 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
 
             pred_not_child = discriminator(state_not_child)
 
-
             loss_discriminator = torch.mean(pred_real) - torch.mean(pred_fake) - torch.mean(pred_not_child)
             loss_discriminator.backward(retain_graph=True)
 
@@ -54,5 +53,9 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
             optimizer_discriminator.step()
             optimizer_generator.step()
 
-            print(loss_generator.item(), loss_discriminator.item())
+            try:
+                neptune_run["train_GAN/loss_G"].log(loss_generator.item())
+                neptune_run["train_GAN/loss_D"].log(loss_discriminator.item())
+            except:
+                print("error connecting to neptune")
     

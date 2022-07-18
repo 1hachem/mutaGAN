@@ -11,11 +11,12 @@ data/
 *.[tc]sv
 
 #notebooks
+notebooks/
 *.ipynb
 
 #neptune
 test_neptune.py
 .neptune/
 
-#auth
+#authentification for neptune
 configuration/auth.json

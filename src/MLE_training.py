@@ -5,7 +5,7 @@ from src.encode import to_ix
 from utils.utils import read_json
 
 
-def MLE_train(seq2seq, optimizer, criterion, parent_data_loader, child_data_loader, num_epochs, device):
+def MLE_train(seq2seq, optimizer, criterion, parent_data_loader, child_data_loader, num_epochs, device, neptune_run=None):
 
     for epoch in range(num_epochs):
         loop = tqdm(zip(parent_data_loader, child_data_loader), total=len(parent_data_loader))
@@ -22,5 +22,8 @@ def MLE_train(seq2seq, optimizer, criterion, parent_data_loader, child_data_load
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-
-            print(loss.item())
+            
+            try:
+                neptune_run["train_MLE/loss"].log(loss.item())
+            except:
+                print("error connecting to neptune")

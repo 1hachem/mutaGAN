@@ -28,8 +28,9 @@ files = read_json("configuration/files.json")
 clade_assignment_path = files["clade_assignment"]
 genomic_sample = files["genomic_sample"]
 clades_in_out_path = files["clades_in_out"]
-parent_pickeled_loader, child_pickeled_loader = files["parent_pickeled_loader"], files["child_pickeled_loader"]
-
+parent_pickeled_loader, child_pickeled_loader, not_child_pickeled_loader = (files["parent_pickeled_loader"], 
+                                                                            files["child_pickeled_loader"], 
+                                                                            files["not_child_pickeled_loader"])
 
 
 def read_data():
@@ -63,19 +64,23 @@ def create_pairs(clades, protein_records):
     #compose parent-child pairs
     parents = []
     children = []
+    not_children = []
     for parent_clade in clades_in_out.keys():
         for child_clade in clades_in_out[parent_clade]:
             parent_index = clades[clades["clade"]==parent_clade].index
             child_index = clades[clades["clade"]==child_clade].index
+            not_child = clades[clades["clade"]!=child_clade].index
             for p in parent_index:
-                for c in child_index:
+                for c,n in zip(child_index, not_child):
                     parents.append(str(protein_records[p].seq))
                     children.append(str(protein_records[c].seq))
+                    not_children.append(str(protein_records[n].seq))
+                    
 
-    return parents, children
+    return parents, children, not_children
 
 
-def load_data(parents, children, batch_size):
+def load_data(parents, children, not_children, batch_size):
     parent_data_loader = torch.utils.data.DataLoader(
     BiologicalSequenceDataset(parents),
     batch_size,
@@ -88,17 +93,24 @@ def load_data(parents, children, batch_size):
         collate_fn=collate_fn
     )
 
-    return parent_data_loader, child_data_loader
+    not_child_data_loader = torch.utils.data.DataLoader(
+        BiologicalSequenceDataset(not_children),
+        batch_size,
+        collate_fn=collate_fn
+    )
+
+    return parent_data_loader, child_data_loader, not_child_data_loader
 
 
-def save_loaders(parent_data_loader, child_data_loader):
+def save_loaders(parent_data_loader, child_data_loader, not_child_data_loader):
     pickle.dump(parent_data_loader, open(parent_pickeled_loader, "wb"))
     pickle.dump(child_data_loader, open(child_pickeled_loader, "wb"))
+    pickle.dump(not_child_data_loader, open(not_child_pickeled_loader, "wb"))
     print("saved at: ", parent_pickeled_loader + " and "+ child_pickeled_loader)
     
 
 def fast_load():
     parent_data_loader = pickle.load(open(parent_pickeled_loader, "rb"))  
     child_data_loader = pickle.load(open(child_pickeled_loader, "rb"))
-
-    return parent_data_loader, child_data_loader
+    not_child_data_loader = pickle.load(open(not_child_pickeled_loader, "rb"))
+    return parent_data_loader, child_data_loader, not_child_data_loader

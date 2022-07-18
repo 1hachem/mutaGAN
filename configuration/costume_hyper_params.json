@@ -1,0 +1,26 @@
+{
+    "---general---":"",
+    "vocab_size" : 28,
+    
+    "---encoder---":"",
+    "encoder_emb_size" : 30,
+    "encoder_hidden_size" : 5,
+    "encoder_num_layers" : 1, 
+    
+    "---decoder---":"",
+    "decoder_emb_size" : 30,
+    "decoder_hidden_size" : 10,
+    "decoder_num_layers" : 1, 
+    
+    "---MLE training---":"",
+    "MLE_num_epochs" : 100,
+    "MLE_batch_size" : 2,
+    "teacher_forcing_ratio": 0.7,
+    "MLE_learning_rate" : 0.01,
+    
+    "---GAN training---":"",
+    "GAN_num_epochs" : 100,
+    "GAN_batch_size" : 2,
+    "GAN_learning_rate" : 1e-3,
+    "GAN_teacher_forcing_ratio": 0.0
+    }

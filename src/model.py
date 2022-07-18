@@ -72,6 +72,8 @@ class Seq2Seq(nn.Module):
         state_ = state.view(batch_size, self.encoder.hidden_size*2).unsqueeze(0)
 
         #add noise to the state 
+        state_ = state_ + torch.normal(0, 1, size=state_.shape)
+        
         outputs = torch.zeros((batch_size, 1, self.decoder.output_size)).to(self.device)
 
         #sos_token = to_ix["<sos>"]

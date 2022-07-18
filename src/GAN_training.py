@@ -5,10 +5,10 @@ from tqdm import tqdm
 from src.encode import to_ix
 
 
-def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator, optimizer_discriminator, parent_data_loader, child_data_loader, num_epochs, device, not_child_data_loader=None):
+def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator, optimizer_discriminator, parent_data_loader, child_data_loader, not_child_data_loader, num_epochs, device):
     for epoch in range(num_epochs):
-        progress_bar = tqdm(zip(parent_data_loader, child_data_loader), total=len(parent_data_loader))
-        for parent, child in progress_bar:
+        progress_bar = tqdm(zip(parent_data_loader, child_data_loader, not_child_data_loader), total=len(parent_data_loader))
+        for parent, child, not_child in progress_bar:
 
             parent = parent.to(device)
             child = child.to(device)
@@ -32,14 +32,20 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
 
             #fake batch
             _, state_fake = discriminator_encoder(generated_child.detach())
-            state_fake = state_real.permute((1,0,2))
+            state_fake = state_fake.permute((1,0,2))
             state_fake = state_fake.reshape(state_fake.shape[0], discriminator_encoder.hidden_size*2)
 
             pred_fake = discriminator(state_fake)
 
-            #TODO here you add the "not-child" sequences too
+            #not-child batch
+            _, state_not_child = discriminator_encoder(generated_child.detach())
+            state_not_child = state_not_child.permute((1,0,2))
+            state_not_child = state_not_child.reshape(state_not_child.shape[0], discriminator_encoder.hidden_size*2)
 
-            loss_discriminator = torch.mean(pred_real) - torch.mean(pred_fake)
+            pred_not_child = discriminator(state_not_child)
+
+
+            loss_discriminator = torch.mean(pred_real) - torch.mean(pred_fake) - torch.mean(pred_not_child)
             loss_discriminator.backward(retain_graph=True)
 
             loss_generator = torch.mean(pred_fake)
@@ -47,4 +53,6 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
 
             optimizer_discriminator.step()
             optimizer_generator.step()
+
+            print(loss_generator.item(), loss_discriminator.item())
     

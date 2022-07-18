@@ -15,7 +15,8 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 
 is_fast_load = True #use when you already have pickled dataloaders for both parent and child sequences 
 
-params = read_json("configuration/original_hyper_params.json")
+paths = read_json("configuration/files.json")
+params = read_json(paths["hyper_params"])
 
 #Generator
 encoder = Encoder(input_size=params["vocab_size"], embedding_size=params["encoder_emb_size"], 
@@ -41,14 +42,14 @@ MLE_criterion = nn.CrossEntropyLoss(ignore_index= to_ix["<pad>"])
 
 #dataloaders
 if is_fast_load:
-    parent_data_loader, child_data_loader = fast_load()
+    parent_data_loader, child_data_loader, not_child_data_loader = fast_load()
 
 else:
     clades, protein_records = read_data()
-    parents, children = create_pairs(clades, protein_records)
+    parents, children, not_children = create_pairs(clades, protein_records)
 
-    parent_data_loader, child_data_loader = load_data(parents, children, params["MLE_batch_size"])
-    save_loaders(parent_data_loader, child_data_loader)
+    parent_data_loader, child_data_loader, not_child_data_loader = load_data(parents, children, not_children, params["MLE_batch_size"])
+    save_loaders(parent_data_loader, child_data_loader, not_child_data_loader)
 
 
 #MLE training
@@ -61,5 +62,5 @@ seq2seq.set_teacher_forcing_ratio(params["GAN_teacher_forcing_ratio"]) #set teac
 for g in optimizer_generator.param_groups: #changing the learning rate of the optimizer
     g['lr'] = params["GAN_learning_rate"]
 
-GAN_train(seq2seq, encoder_disc, classifier, optimizer_generator, optimizer_discriminator, parent_data_loader, child_data_loader,
+GAN_train(seq2seq, encoder_disc, classifier, optimizer_generator, optimizer_discriminator, parent_data_loader, child_data_loader, not_child_data_loader,
                 params["GAN_num_epochs"], device)

@@ -10,7 +10,7 @@ def MLE_train(seq2seq, optimizer, criterion, parent_data_loader, child_data_load
     for epoch in range(num_epochs):
         loop = tqdm(zip(parent_data_loader, child_data_loader), total=len(parent_data_loader))
         for parent, child in loop:
-
+        
             parent = parent.to(device)
             child = child.to(device)
 

@@ -50,8 +50,8 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
 
             loss_discriminator = torch.mean(pred_real) - torch.mean(pred_fake) - torch.mean(pred_not_child)
             loss_discriminator.backward(retain_graph=True)
-
-            loss_generator = torch.mean(pred_fake)
+            cross_loss = nn.CrossEntropyLoss(ignore_index= to_ix["<pad>"])
+            loss_generator = torch.mean(pred_fake) + cross_loss(generated_child, child[:,:generated_child.shape[-1]]) #w loss + categorical cross entropy
             loss_generator.backward()
 
             optimizer_discriminator.step()

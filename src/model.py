@@ -69,10 +69,11 @@ class Seq2Seq(nn.Module):
         hidden, state = self.encoder(parent_batch)
 
         hidden_ = hidden.view(batch_size, self.encoder.hidden_size*2).unsqueeze(0)
-        state_ = state.view(batch_size, self.encoder.hidden_size*2).unsqueeze(0)
+        state_ = state_parent = state.view(batch_size, self.encoder.hidden_size*2).unsqueeze(0)
 
         #add noise to the state 
         state_ = state_ + torch.normal(0, 1, size=state_.shape)
+        hidden_ = hidden_ + torch.normal(0, 1, size=hidden_.shape)
         
         outputs = torch.zeros((batch_size, 1, self.decoder.output_size)).to(self.device)
 
@@ -88,8 +89,7 @@ class Seq2Seq(nn.Module):
             #teacher forcing 
             x = child_batch[:,t].unsqueeze(-1).int() if random.random() < self.teacher_forcing_ratio else output.argmax(-1)
 
-        return outputs
-
+        return outputs, state_parent
     def get_encoder(self):
         return self.encoder
 
@@ -103,8 +103,8 @@ class Classifier(nn.Module):
         self.hidden_size = hidden_size
         self.classifier = nn.Sequential(
             nn.Dropout(0.2),
-            nn.BatchNorm1d(2*self.hidden_size),
-            nn.Linear(2*self.hidden_size, 128),
+            nn.BatchNorm1d(self.hidden_size),
+            nn.Linear(self.hidden_size, 128),
             nn.LeakyReLU(0.1),
             nn.Dropout(0.2),
             nn.BatchNorm1d(128),
@@ -114,6 +114,7 @@ class Classifier(nn.Module):
             nn.Linear(64,1)
             )
         
-    def forward(self, x):
+    def forward(self, parent, child):
+        x = torch.cat((parent,child), dim=-1)
         x = self.classifier(x)
         return x

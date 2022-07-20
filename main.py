@@ -15,7 +15,8 @@ from utils.utils import read_json
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-is_fast_load = True #use when you already have pickled dataloaders for both parent and child sequences 
+is_fast_load = True #use when you already have pickled dataloaders for both parent and child sequences
+is_neptune = False #is you enable neptune (set configuration/auth.json) 
 
 paths = read_json("configuration/files.json")
 params = read_json(paths["hyper_params"])
@@ -33,7 +34,7 @@ seq2seq = Seq2Seq(encoder, decoder, teacher_forcing_ratio=params["teacher_forcin
 encoder_disc = Encoder(input_size=params["vocab_size"], embedding_size=params["encoder_emb_size"], 
         hidden_size=params["encoder_hidden_size"], num_layers=params["encoder_num_layers"], disc=True, device=device)
 
-classifier = Classifier(params["encoder_hidden_size"], device=device)
+classifier = Classifier(params["encoder_hidden_size"]*4, device=device)
 
 #optimizers
 optimizer_generator = Adam(seq2seq.parameters(), lr= params["MLE_learning_rate"])
@@ -54,18 +55,23 @@ else:
     save_loaders(parent_data_loader, child_data_loader, not_child_data_loader)
 
 #### monitoring with neptune.ai
-auth = read_json("configuration/auth.json")
+if is_neptune:
+    auth = read_json("configuration/auth.json")
 
-neptune_run = neptune.init(
-    project=auth["project"],
-    api_token=auth["api_token"],
-)
-neptune_run["parameters"] = params
+    neptune_run = neptune.init(
+        project=auth["project"],
+        api_token=auth["api_token"],
+    )
+    neptune_run["parameters"] = params
+else:
+    neptune_run = None
 
 #### MLE training
-MLE_train(seq2seq, optimizer_generator, MLE_criterion, parent_data_loader, child_data_loader, num_epochs=params["MLE_num_epochs"], device=device, neptune_run=neptune_run)
+print("MLE training ...")
+# MLE_train(seq2seq, optimizer_generator, MLE_criterion, parent_data_loader, child_data_loader, num_epochs=params["MLE_num_epochs"], device=device, neptune_run=neptune_run)
 
 #### GAN training 
+print("GAN training ...")
 seq2seq.set_teacher_forcing_ratio(params["GAN_teacher_forcing_ratio"]) #set teacher forcing to 0
 
 for g in optimizer_generator.param_groups: #changing the learning rate of the optimizer
@@ -74,4 +80,5 @@ for g in optimizer_generator.param_groups: #changing the learning rate of the op
 GAN_train(seq2seq, encoder_disc, classifier, optimizer_generator, optimizer_discriminator, parent_data_loader, child_data_loader, not_child_data_loader,
                 params["GAN_num_epochs"], device, neptune_run)
 
-neptune_run.stop()
+if is_neptune:
+    neptune_run.stop()

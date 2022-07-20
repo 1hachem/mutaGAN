@@ -12,8 +12,11 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
 
             parent = parent.to(device)
             child = child.to(device)
+            not_child = not_child.to(device)
 
-            generated_child = seq2seq(parent, child, sos_token=to_ix["<sos>"])
+            generated_child, state_parent = seq2seq(parent, child, sos_token=to_ix["<sos>"])
+            state_parent = state_parent.permute((1,0,2))
+            state_parent = state_parent.reshape(state_parent.shape[0], discriminator_encoder.hidden_size*2)
 
             encoder = seq2seq.get_encoder()
             discriminator_encoder.rnn.load_state_dict(encoder.rnn.state_dict())
@@ -21,28 +24,29 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
 
             optimizer_generator.zero_grad()
             optimizer_discriminator.zero_grad()
-
+            
             #real batch
             child_one_hot_encoded = nn.functional.one_hot(child).float()
             _, state_real = discriminator_encoder(child_one_hot_encoded)
             state_real = state_real.permute((1,0,2))
             state_real = state_real.reshape(state_real.shape[0], discriminator_encoder.hidden_size*2)
 
-            pred_real = discriminator(state_real)      
+            pred_real = discriminator(state_parent, state_real)      
 
             #fake batch
             _, state_fake = discriminator_encoder(generated_child.detach())
             state_fake = state_fake.permute((1,0,2))
             state_fake = state_fake.reshape(state_fake.shape[0], discriminator_encoder.hidden_size*2)
 
-            pred_fake = discriminator(state_fake)
+            pred_fake = discriminator(state_parent, state_fake)
 
             #not-child batch
-            _, state_not_child = discriminator_encoder(generated_child.detach())
+            not_child_one_hot_encoded = nn.functional.one_hot(not_child).float()
+            _, state_not_child = discriminator_encoder(not_child_one_hot_encoded)
             state_not_child = state_not_child.permute((1,0,2))
             state_not_child = state_not_child.reshape(state_not_child.shape[0], discriminator_encoder.hidden_size*2)
 
-            pred_not_child = discriminator(state_not_child)
+            pred_not_child = discriminator(state_parent, state_not_child)
 
             loss_discriminator = torch.mean(pred_real) - torch.mean(pred_fake) - torch.mean(pred_not_child)
             loss_discriminator.backward(retain_graph=True)
@@ -57,5 +61,5 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
                 neptune_run["train_GAN/loss_G"].log(loss_generator.item())
                 neptune_run["train_GAN/loss_D"].log(loss_discriminator.item())
             except:
-                print("error connecting to neptune")
+                progress_bar.set_description("error connecting to neptune")
     

@@ -9,6 +9,10 @@ data/
 *.f[an]a
 *.fasta
 *.[tc]sv
+# data/output/
+# data/ncbidata/
+# data/datasets
+# data/nextclade_reference
 
 #notebooks
 notebooks/

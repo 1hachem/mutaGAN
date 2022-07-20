@@ -1,0 +1,9 @@
+{
+    "19A":["19B", "20A"],
+    "20A":["20B", "20C", "20E", "21A (Delta)", "21B (Kappa)", "21D (Eta)", "21H (Mu)"],
+    "20B":["20D","20F","20I (Alpha)","20J (Gamma)","21E (Theta)","21M (Omicron)"],
+    "20C":["20G","20H (Beta)","21C (Epsilon)","21F (Iota)"],
+    "21A (Delta)":["21I (Delta)","21J (Delta)"],
+    "20D":["21G (Lambda)"],
+    "21M (Omicron)":["21K (Omicron)","21L (Omicron)"]
+}

@@ -24,3 +24,7 @@ test_neptune.py
 
 #authentification for neptune
 configuration/auth.json
+
+#illustraions
+*.png
+*.jpg

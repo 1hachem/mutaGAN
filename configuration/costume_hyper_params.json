@@ -1,5 +1,6 @@
 {
     "---general---":"",
+    "k-mer":1,
     "vocab_size" : 28,
     
     "---encoder---":"",

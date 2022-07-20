@@ -1,6 +1,7 @@
 {
 "---general---":"",
-"vocab_size" : 28,
+"k-mer":3,
+"vocab_size" : 4500,
 
 "---encoder---":"",
 "encoder_emb_size" : 250,
@@ -19,8 +20,11 @@
 "MLE_learning_rate" : 0.01,
 
 "---GAN training---":"",
-"GAN_num_epochs" : 350,
-"GAN_batch_size" : 16,
-"GAN_learning_rate" : 1e-3,
+"GAN_num_epochs_1" : 200,
+"GAN_num_epochs_2" : 150,
+"GAN_batch_size_1" : 32,
+"GAN_batch_size_2" : 45,
+"GAN_learning_rate_generator" : 1e-3,
+"GAN_learning_rate_discriminator":3e-5,
 "GAN_teacher_forcing_ratio": 0.0
 }

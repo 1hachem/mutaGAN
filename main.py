@@ -68,7 +68,7 @@ else:
 
 #### MLE training
 print("MLE training ...")
-# MLE_train(seq2seq, optimizer_generator, MLE_criterion, parent_data_loader, child_data_loader, num_epochs=params["MLE_num_epochs"], device=device, neptune_run=neptune_run)
+MLE_train(seq2seq, optimizer_generator, MLE_criterion, parent_data_loader, child_data_loader, num_epochs=params["MLE_num_epochs"], device=device, neptune_run=neptune_run)
 
 #### GAN training 
 print("GAN training ...")

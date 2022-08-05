@@ -69,6 +69,7 @@ else:
 #### MLE training
 print("MLE training ...")
 MLE_train(seq2seq, optimizer_generator, MLE_criterion, parent_data_loader, child_data_loader, num_epochs=params["MLE_num_epochs"], device=device, neptune_run=neptune_run)
+torch.save(seq2seq.state_dict(), paths["saved_seq2seq_MLE"])
 
 #### GAN training 
 print("GAN training ...")
@@ -79,6 +80,8 @@ for g in optimizer_generator.param_groups: #changing the learning rate of the op
 
 GAN_train(seq2seq, encoder_disc, classifier, optimizer_generator, optimizer_discriminator, parent_data_loader, child_data_loader, not_child_data_loader,
                 params["GAN_num_epochs"], device, neptune_run)
+torch.save(seq2seq.state_dict(), paths["saved_seq2seq_GAN"])
+torch.save(classifier.state_dict(), paths["saved_classifier_GAN"])
 
 if is_neptune:
     neptune_run.stop()

@@ -1,0 +1,1 @@
+awk 'BEGIN {n_seq=0;} /^>/ {if(n_seq%200000==0){file=sprintf("ncbi_dataset/data/split/split%d.fna",n_seq);} print >> file; n_seq++; next;} { print >> file; }' < ncbi_dataset/data/cds.fna

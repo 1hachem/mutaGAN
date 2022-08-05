@@ -1,7 +1,6 @@
 import json
 from Bio import SeqIO
 
-  
 
 def read_json(file):
 # Opening JSON file
@@ -15,3 +14,6 @@ def read_json(file):
 
 def read_fasta(file):
     return list(SeqIO.parse("data/ncbidata/genomic.fna", "fasta"))
+
+def write_fasta(sequences,file): #TODO write fasta
+    pass 

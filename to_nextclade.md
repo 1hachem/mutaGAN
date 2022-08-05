@@ -27,6 +27,6 @@ I like to add `--verbose` option to get an idea of what is happening
 
 example 
 ```
-./datasets download virus genome taxon SARS-CoV-2 --released-since "2022-07-08" 
+datasets download virus protein S 
 ```
 

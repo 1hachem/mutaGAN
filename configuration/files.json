@@ -6,5 +6,9 @@
     "clades_in_out" :"data/clade_in_out.json",
     "parent_pickeled_loader": "data/training_parents.p",
     "child_pickeled_loader":"data/training_children.p",
-    "not_child_pickeled_loader":"data/training_not_children.p"
+    "not_child_pickeled_loader":"data/training_not_children.p",
+    "saved_seq2seq_MLE":"models/MLE/trained_seq2seq.pt",
+    "saved_seq2seq_GAN":"models/GAN/trained_seq2seq.pt",
+    "saved_classifier_GAN":"models/GAN/trained_classifier.pt",
+    "generated_sequences":"generated/generated_sequences.fasta"
 }

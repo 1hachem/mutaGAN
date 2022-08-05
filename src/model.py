@@ -62,9 +62,12 @@ class Seq2Seq(nn.Module):
         self.decoder = decoder 
         self.teacher_forcing_ratio = teacher_forcing_ratio
 
-    def forward(self, parent_batch, child_batch, sos_token):
+    def forward(self, parent_batch, child_batch, sos_token, inference=False):
+
         batch_size = parent_batch.shape[0]
-        child_len = child_batch.shape[-1]
+        
+        if not(inference):
+            child_len = child_batch.shape[-1]
 
         hidden, state = self.encoder(parent_batch)
 
@@ -80,14 +83,20 @@ class Seq2Seq(nn.Module):
         #sos_token = to_ix["<sos>"]
         x = sos_token*torch.ones((batch_size,1)).int().to(self.device)
 
-        for t in range(child_len):
-            #output shape (batch_size, 1, vocab size)
-            #outputs shape ((batch_size, seq_len, vocab size))
-            output, hidden_, state_ = self.decoder(x, hidden_, state_)
-            outputs = torch.cat((outputs, output), dim=1)
-            
-            #teacher forcing 
-            x = child_batch[:,t].unsqueeze(-1).int() if random.random() < self.teacher_forcing_ratio else output.argmax(-1)
+        if inference:
+            for t in range(1273): #TODO until <eos>
+                output, hidden_, state_ = self.decoder(x, hidden_, state_)
+                outputs = torch.cat((outputs, output), dim=1)
+                x = output.argmax(-1)
+        else:
+            for t in range(child_len):
+                #output shape (batch_size, 1, vocab size)
+                #outputs shape ((batch_size, seq_len, vocab size))
+                output, hidden_, state_ = self.decoder(x, hidden_, state_)
+                outputs = torch.cat((outputs, output), dim=1)
+                
+                #teacher forcing 
+                x = child_batch[:,t].unsqueeze(-1).int() if random.random() < self.teacher_forcing_ratio else output.argmax(-1)
 
         return outputs, state_parent
     def get_encoder(self):

@@ -5,7 +5,7 @@ def get_vocab(sequences):
     vocab = set()
     for record in sequences:
         vocab.update(str(record.seq))
-    vocab.add("<pad>"), vocab.add("<sos>"), vocab.add("<eos>")
+    vocab.add("<pad>"),vocab.add("<sos>"), vocab.add("<eos>")
     
     to_ix = {char: i for i, char in enumerate(vocab)}
 
@@ -41,3 +41,32 @@ to_ix = {
  'Y': 26,
  'L': 27
  }
+
+inv_to_ix = {0: 'V',
+  1: 'I',
+  2: 'G',
+  3: '<sos>',
+  4: 'D',
+  5: 'C',
+  6: 'S',
+  7: 'B',
+  8: 'Z',
+  9: 'N',
+  10: 'F',
+  11: 'A',
+  12: 'M',
+  13: 'E',
+  14: 'J',
+  15: 'P',
+  16: 'T',
+  17: 'Q',
+  18: 'K',
+  19: 'H',
+  20: 'W',
+  21: '*',
+  22: '<eos>',
+  23: '<pad>',
+  24: 'X',
+  25: 'R',
+  26: 'Y',
+  27: 'L'}

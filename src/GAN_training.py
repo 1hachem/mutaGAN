@@ -48,7 +48,7 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
 
             pred_not_child = discriminator(state_parent, state_not_child)
 
-            loss_discriminator = torch.mean(pred_real) - torch.mean(pred_fake) - torch.mean(pred_not_child)
+            loss_discriminator = torch.mean(pred_real) - torch.mean(pred_fake) - torch.mean(pred_not_child) #TODO write it well 
             loss_discriminator.backward(retain_graph=True)
             cross_loss = nn.CrossEntropyLoss(ignore_index= to_ix["<pad>"])
             loss_generator = torch.mean(pred_fake) + cross_loss(generated_child, child[:,:generated_child.shape[-1]]) #w loss + categorical cross entropy
@@ -62,4 +62,3 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
                 neptune_run["train_GAN/loss_D"].log(loss_discriminator.item())
             except:
                 progress_bar.set_description("error connecting to neptune")
-    

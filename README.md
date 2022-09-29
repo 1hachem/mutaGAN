@@ -10,6 +10,8 @@ The ability to predict the evolution of a pathogen would significantly improve t
 paper : <https://arxiv.org/abs/2008.11790>
 
 ## general overview
+this repo aims to use mutaGAN to generate new variants of SARS-CoV-2 spike protein.
+sequences are collected from ncbi.
 
 ## step guide 
 
@@ -48,4 +50,4 @@ python main.py
 - [ ] generate.py/ save generated sequences
 - [ ] utils.py/ kmering
 - [ ] utils.py/ levenshtein distance
-- [ ] model.py/ stop generating sequences when `<eos>`
+- [ ] model.py/ stop generating sequences when `eos` token is reached

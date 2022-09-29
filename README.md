@@ -43,8 +43,9 @@ python main.py
 ```
 
 ## todo
+
 - [ ] utils.py/write_fasta
 - [ ] generate.py/ save generated sequences
 - [ ] utils.py/ kmering
 - [ ] utils.py/ levenshtein distance
-- [ ] model.py/ stop generating sequences when <eos>
+- [ ] model.py/ stop generating sequences when `<eos>`

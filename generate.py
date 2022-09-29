@@ -37,7 +37,7 @@ with torch.no_grad():
 
     generated_child, _= seq2seq(parent, None, sos_token=to_ix["<sos>"], inference=True)
 
-#save gnerated sequences
+#save gnerated sequences TODO
 print([[inv_to_ix[aa.item()] for aa in seq ] for seq in generated_child.argmax(-1)], paths["generated_sequences"])
 
 

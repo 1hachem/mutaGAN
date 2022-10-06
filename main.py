@@ -29,6 +29,7 @@ decoder = Decoder(input_size=params["vocab_size"], embedding_size=params["decode
         hidden_size=params["decoder_hidden_size"], output_size=params["vocab_size"], num_layers=params["decoder_num_layers"], device=device)
 
 seq2seq = Seq2Seq(encoder, decoder, teacher_forcing_ratio=params["teacher_forcing_ratio"], device=device)
+seq2seq = seq2seq.to(device)
 
 #Discriminator
 encoder_disc = Encoder(input_size=params["vocab_size"], embedding_size=params["encoder_emb_size"], 

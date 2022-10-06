@@ -8,7 +8,7 @@ def read_json(file):
         # a dictionary
         data = json.load(f)
 
-    return dat
+    return data
 
 paths = read_json("configuration/files.json")
 

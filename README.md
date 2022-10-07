@@ -44,6 +44,13 @@ datasets download virus protein S
 python main.py
 ```
 
+## hyperparams description 
+|hyperparam|description|
+|----------|-----------|
+|embedding size | the size of each embedding vector (i.e. size of the learned vector encoding each single kmer)|
+|number of layers | number of recurrent layers (e|g| num_layers = 2 will mean two stacked lstm layers with the second lstm taking as input the output of the first one and giving the final result)|
+|hidden size | the number of features in the hidden state h (which is passed to our stack of layers in the next time stamp i.e. the next kmer in the sequence)|
+
 ## todo
 
 - [ ] utils.py/ write_fasta

@@ -58,5 +58,3 @@ python main.py
 - [ ] utils.py/ kmering
 - [ ] utils.py/ levenshtein distance
 - [ ] model.py/ stop generating sequences when `eos` token is reached
-
-test

@@ -71,8 +71,8 @@ class Seq2Seq(nn.Module):
 
         hidden, state = self.encoder(parent_batch)
 
-        hidden_ = hidden.view(batch_size, self.encoder.hidden_size*2).unsqueeze(0)
-        state_ = state_parent = state.view(batch_size, self.encoder.hidden_size*2).unsqueeze(0)
+        hidden_ = hidden.view(self.encoder.num_layers, batch_size, self.encoder.hidden_size*2)
+        state_ = state_parent = state.view(self.encoder.num_layers, batch_size, self.encoder.hidden_size*2)
 
         #add noise to the state 
         state_ = state_ + torch.normal(0, 1, size=state_.shape).to(self.device)

@@ -34,8 +34,9 @@ seq2seq = seq2seq.to(device)
 #Discriminator
 encoder_disc = Encoder(input_size=params["vocab_size"], embedding_size=params["encoder_emb_size"], 
         hidden_size=params["encoder_hidden_size"], num_layers=params["encoder_num_layers"], disc=True, device=device)
-
 classifier = Classifier(params["encoder_hidden_size"]*4, device=device)
+encoder_disc.to(device)
+classifier.to(device)
 
 #optimizers
 optimizer_generator = Adam(seq2seq.parameters(), lr= params["MLE_learning_rate"])

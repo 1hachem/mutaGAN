@@ -16,7 +16,7 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
 
             generated_child, state_parent = seq2seq(parent, child, sos_token=to_ix["<sos>"])
             state_parent = state_parent.permute((1,0,2))
-            state_parent = state_parent.reshape(state_parent.shape[0], discriminator_encoder.hidden_size*2)
+            state_parent = state_parent.reshape(state_parent.shape[0], discriminator_encoder.num_layers*discriminator_encoder.hidden_size*2)
 
             encoder = seq2seq.get_encoder()
             discriminator_encoder.rnn.load_state_dict(encoder.rnn.state_dict())
@@ -29,14 +29,14 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
             child_one_hot_encoded = nn.functional.one_hot(child).float()
             _, state_real = discriminator_encoder(child_one_hot_encoded)
             state_real = state_real.permute((1,0,2))
-            state_real = state_real.reshape(state_real.shape[0], discriminator_encoder.hidden_size*2)
+            state_real = state_real.reshape(state_real.shape[0], discriminator_encoder.num_layers*discriminator_encoder.hidden_size*2)
 
             pred_real = discriminator(state_parent, state_real)      
 
             #fake batch
             _, state_fake = discriminator_encoder(generated_child.detach())
             state_fake = state_fake.permute((1,0,2))
-            state_fake = state_fake.reshape(state_fake.shape[0], discriminator_encoder.hidden_size*2)
+            state_fake = state_fake.reshape(state_fake.shape[0], discriminator_encoder.num_layers*discriminator_encoder.hidden_size*2)
 
             pred_fake = discriminator(state_parent, state_fake)
 
@@ -44,7 +44,7 @@ def GAN_train(seq2seq, discriminator_encoder, discriminator, optimizer_generator
             not_child_one_hot_encoded = nn.functional.one_hot(not_child).float()
             _, state_not_child = discriminator_encoder(not_child_one_hot_encoded)
             state_not_child = state_not_child.permute((1,0,2))
-            state_not_child = state_not_child.reshape(state_not_child.shape[0], discriminator_encoder.hidden_size*2)
+            state_not_child = state_not_child.reshape(state_not_child.shape[0], discriminator_encoder.num_layers*discriminator_encoder.hidden_size*2)
 
             pred_not_child = discriminator(state_parent, state_not_child)
 

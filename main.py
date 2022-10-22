@@ -16,7 +16,7 @@ from utils.utils import read_json
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 is_fast_load = True #use when you already have pickled dataloaders for both parent and child sequences
-is_neptune = False #is you enable neptune (set configuration/auth.json) 
+is_neptune = True #is you enable neptune (set configuration/auth.json) 
 
 paths = read_json("configuration/files.json")
 params = read_json(paths["hyper_params"])

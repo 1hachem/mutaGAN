@@ -65,17 +65,20 @@ def create_pairs(clades, protein_records):
     parents = []
     children = []
     not_children = []
+
     for parent_clade in clades_in_out.keys():
         for child_clade in clades_in_out[parent_clade]:
+
             parent_index = clades[clades["clade"]==parent_clade].index
             child_index = clades[clades["clade"]==child_clade].index
             not_child = clades[clades["clade"]!=child_clade].index
+
             for p in parent_index:
                 for c,n in zip(child_index, not_child):
                     parents.append(str(protein_records[p].seq))
                     children.append(str(protein_records[c].seq))
 
-            #TODO randomly pairing unrelated parent and child sequences with a Levenshtein distance greater than 15
+            #TODO randomly pairing parent and non-child sequences with a Levenshtein distance greater than 15
                     not_children.append(str(protein_records[n].seq))
                     
 
